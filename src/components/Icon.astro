@@ -1,0 +1,49 @@
+---
+interface Props {
+	name:
+		| 'badge-euro'
+		| 'check-circle-2'
+		| 'circle-alert'
+		| 'copy'
+		| 'gauge'
+		| 'key-round'
+		| 'lock-keyhole'
+		| 'message-circle'
+		| 'mouse-pointer-click'
+		| 'scan-search'
+		| 'shield-check'
+		| 'snail'
+		| 'unplug';
+	class?: string;
+}
+
+const { name, class: className } = Astro.props;
+
+const paths: Record<Props['name'], string> = {
+	'badge-euro': '<path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="M7 12h5"/><path d="M15 9.4a3.5 3.5 0 1 0 0 5.2"/>',
+	'check-circle-2': '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>',
+	'circle-alert': '<circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/>',
+	copy: '<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+	gauge: '<path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>',
+	'key-round': '<path d="M2.59 14.41a2 2 0 0 0 0 2.82l.18.18a2 2 0 0 0 2.82 0L8 15h3v-3l.41-.41a6.5 6.5 0 1 0-3-3z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/>',
+	'lock-keyhole': '<circle cx="12" cy="16" r="1"/><rect width="18" height="12" x="3" y="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/>',
+	'message-circle': '<path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>',
+	'mouse-pointer-click': '<path d="m9 9 5 12 1.8-5.2L21 14Z"/><path d="M7.2 2.2 8 5.1"/><path d="m5.1 8-2.9-.8"/><path d="M14 4.1 12 6"/><path d="m6 12-1.9 2"/>',
+	'scan-search': '<path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="11" cy="11" r="3"/><path d="m16 16-2.1-2.1"/>',
+	'shield-check': '<path d="M20 13c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V5l8-3 8 3z"/><path d="m9 12 2 2 4-4"/>',
+	snail: '<path d="M2 13h8"/><path d="M6 9v4"/><path d="M10 13a4 4 0 1 0 0-8 6 6 0 0 0-6 6v2"/><path d="M10 13c0 3 2 5 5 5h3a4 4 0 0 0 4-4v-1Z"/><path d="M18 13v-3"/><path d="M22 13v-3"/><circle cx="18" cy="8" r=".5" fill="currentColor"/><circle cx="22" cy="8" r=".5" fill="currentColor"/>',
+	unplug: '<path d="m19 5 3-3"/><path d="m2 22 3-3"/><path d="M6 13 11 8l5 5-5 5z"/><path d="m13 6 3-3 5 5-3 3"/><path d="m11 18-3 3-5-5 3-3"/>',
+};
+---
+
+<svg
+	class={className}
+	viewBox="0 0 24 24"
+	fill="none"
+	stroke="currentColor"
+	stroke-width="1.7"
+	stroke-linecap="round"
+	stroke-linejoin="round"
+	aria-hidden="true"
+	set:html={paths[name]}
+></svg>

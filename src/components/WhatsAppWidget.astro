@@ -1,0 +1,467 @@
+---
+const whatsappNumberRaw = import.meta.env.PUBLIC_WHATSAPP_NUMBER || '34684774365';
+const whatsappNumber = String(whatsappNumberRaw).replace(/[^\d]/g, '');
+const whatsappMessage = import.meta.env.PUBLIC_WHATSAPP_MESSAGE || 'Hola, quiero solicitar información para arreglar la web de mi Kit Digital.';
+const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(whatsappMessage)}`;
+---
+
+<div class="wa-widget" data-wa-widget data-wa-threshold="160">
+  <button
+    class="wa-fab"
+    type="button"
+    aria-label="Abrir chat de WhatsApp"
+    aria-controls="wa-popup"
+    aria-expanded="false"
+  >
+    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
+      <circle class="wa-fab-bg" cx="16" cy="16" r="16"></circle>
+      <path
+        d="M23.2 8.8A9.68 9.68 0 0 0 16.32 6C10.95 6 6.56 10.39 6.56 15.76c0 1.72.45 3.4 1.3 4.89L6.5 26l5.5-1.32a9.67 9.67 0 0 0 4.31 1.03h.01c5.37 0 9.76-4.39 9.76-9.76a9.7 9.7 0 0 0-2.88-6.9Zm-6.88 15.2h-.01a8.07 8.07 0 0 1-4.12-1.14l-.3-.18-3.26.78.87-3.18-.2-.33a8.06 8.06 0 0 1-1.24-4.2c0-4.45 3.63-8.08 8.1-8.08 2.16 0 4.2.84 5.73 2.37a8.04 8.04 0 0 1 2.38 5.73c0 4.46-3.63 8.1-8.08 8.1Zm4.44-6.06c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1-.37-1.9-1.17-.7-.62-1.16-1.38-1.3-1.62-.14-.24-.01-.37.1-.49.1-.1.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.48-.4-.42-.54-.43h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.68 2.56 4.06 3.58.57.24 1.02.38 1.37.48.58.18 1.1.16 1.52.1.46-.07 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z"
+        class="wa-fab-mark"
+      />
+    </svg>
+  </button>
+
+  <section class="wa-popup" id="wa-popup" role="dialog" aria-label="Chat de WhatsApp" hidden>
+    <header class="wa-popup-head">
+      <div class="wa-popup-brand">
+        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <path
+            d="M16 3.2c-7.06 0-12.8 5.74-12.8 12.8 0 2.25.6 4.44 1.73 6.37L3.2 28.8l6.55-1.72A12.7 12.7 0 0 0 16 28.8h.01c7.06 0 12.8-5.74 12.8-12.8S23.06 3.2 16 3.2Zm0 23.24h-.01c-1.92 0-3.8-.52-5.45-1.5l-.39-.23-3.88 1.02 1.03-3.78-.25-.4a10.35 10.35 0 0 1-1.59-5.42c0-5.72 4.65-10.37 10.38-10.37 2.77 0 5.36 1.08 7.33 3.04a10.3 10.3 0 0 1 3.05 7.33c0 5.73-4.65 10.38-10.37 10.38Z"
+            fill="currentColor"
+          />
+        </svg>
+        <span>WhatsApp</span>
+      </div>
+      <button class="wa-popup-close" type="button" aria-label="Cerrar ventana de WhatsApp">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
+        </svg>
+      </button>
+    </header>
+
+    <div class="wa-popup-body">
+      <p class="wa-bubble">Hola 👋<br />¿En qué podemos ayudarte?</p>
+      <a class="wa-open-chat" href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="Abrir chat en WhatsApp">
+        <span>Abrir chat</span>
+        <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <path
+            d="M16 3.2c-7.06 0-12.8 5.74-12.8 12.8 0 2.25.6 4.44 1.73 6.37L3.2 28.8l6.55-1.72A12.7 12.7 0 0 0 16 28.8h.01c7.06 0 12.8-5.74 12.8-12.8S23.06 3.2 16 3.2Zm0 23.24h-.01c-1.92 0-3.8-.52-5.45-1.5l-.39-.23-3.88 1.02 1.03-3.78-.25-.4a10.35 10.35 0 0 1-1.59-5.42c0-5.72 4.65-10.37 10.38-10.37 2.77 0 5.36 1.08 7.33 3.04a10.3 10.3 0 0 1 3.05 7.33c0 5.73-4.65 10.38-10.37 10.38Z"
+            fill="currentColor"
+          />
+        </svg>
+      </a>
+    </div>
+  </section>
+</div>
+
+<style>
+  .wa-widget {
+    position: fixed;
+    right: 22px;
+    bottom: 26px;
+    z-index: 1505;
+    pointer-events: none;
+  }
+
+  .wa-fab {
+    width: 66px;
+    height: 66px;
+    border: 0;
+    border-radius: 999px;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    display: block;
+    opacity: 0;
+    transform: translateY(14px) scale(0.9);
+    transition: transform 0.24s ease-out, opacity 0.24s ease-out;
+    box-shadow: 0 9px 26px rgba(0, 0, 0, 0.22);
+    pointer-events: none;
+    touch-action: manipulation;
+  }
+
+  .wa-fab svg {
+    width: 66px;
+    height: 66px;
+    display: block;
+  }
+
+  .wa-fab-bg {
+    fill: light-dark(#183f50, #afd5df);
+  }
+
+  .wa-fab-mark {
+    fill: light-dark(#f7fbfc, #142832);
+  }
+
+  .wa-widget.is-visible {
+    pointer-events: auto;
+  }
+
+  .wa-widget.is-visible .wa-fab {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .wa-popup {
+    position: absolute;
+    right: 0;
+    bottom: 82px;
+    width: min(392px, calc(100vw - 28px));
+    background: light-dark(#ffffff, #1a252b);
+    border-radius: 28px;
+    box-shadow: 0 15px 36px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+    transform-origin: bottom right;
+    pointer-events: none;
+    transition: transform 0.22s ease-out, opacity 0.22s ease-out;
+  }
+
+  .wa-widget.is-open .wa-popup {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .wa-popup-head {
+    background: light-dark(#183f50, #294a50);
+    color: light-dark(#f7fbfc, #edf3f5);
+    min-height: 68px;
+    padding: 0 16px 0 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .wa-popup-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'DM Sans', Arial, sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .wa-popup-brand svg {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+  }
+
+  .wa-popup-brand span {
+    font-size: clamp(1.12rem, 1.35vw, 1.34rem);
+    font-weight: 700;
+  }
+
+  .wa-popup-close {
+    width: 46px;
+    height: 46px;
+    border: 0;
+    border-radius: 999px;
+    background: light-dark(#102f3d, #172126);
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.16s ease-out;
+    touch-action: manipulation;
+  }
+
+  .wa-popup-close:hover {
+    transform: scale(1.05);
+  }
+
+  .wa-popup-close svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+  }
+
+  .wa-popup-body {
+    display: flex;
+    flex-direction: column;
+    padding: 24px 22px 18px;
+  }
+
+  .wa-bubble {
+    margin: 0 0 20px;
+    max-width: 81%;
+    padding: 16px 20px;
+    border-radius: 34px;
+    background: light-dark(#edf2f6, #23343e);
+    color: light-dark(#172a35, #edf3f5);
+    font-family: 'DM Sans', Arial, sans-serif;
+    font-size: clamp(0.92rem, 1.05vw, 1.08rem);
+    line-height: 1.25;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    position: relative;
+  }
+
+  .wa-bubble::before {
+    content: '';
+    position: absolute;
+    left: -14px;
+    bottom: 20px;
+    width: 24px;
+    height: 16px;
+    background: light-dark(#edf2f6, #23343e);
+    clip-path: polygon(0 100%, 100% 40%, 100% 100%);
+  }
+
+  .wa-open-chat {
+    margin-left: 0;
+    align-self: flex-end;
+    width: auto;
+    min-width: 0;
+    border-radius: 999px;
+    padding: 11px 18px;
+    background: light-dark(#183f50, #294a50);
+    color: #fff;
+    font-family: 'DM Sans', Arial, sans-serif;
+    font-size: clamp(1rem, 1.12vw, 1.12rem);
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: transform 0.18s ease-out;
+  }
+
+  .wa-open-chat:hover {
+    transform: scale(1.03);
+  }
+
+  .wa-open-chat svg {
+    width: 36px;
+    height: 36px;
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .wa-widget {
+      right: 14px;
+      bottom: 20px;
+    }
+
+    .wa-fab,
+    .wa-fab svg {
+      width: 62px;
+      height: 62px;
+    }
+
+    .wa-popup {
+      width: min(352px, calc(100vw - 20px));
+      bottom: 76px;
+      border-radius: 24px;
+    }
+
+    .wa-popup-head {
+      min-height: 60px;
+      padding: 0 12px;
+    }
+
+    .wa-popup-brand {
+      gap: 10px;
+    }
+
+    .wa-popup-brand svg {
+      width: 30px;
+      height: 30px;
+      flex-basis: 30px;
+    }
+
+    .wa-popup-brand span {
+      font-size: clamp(1.18rem, 5vw, 1.42rem);
+    }
+
+    .wa-popup-close {
+      width: 38px;
+      height: 38px;
+    }
+
+    .wa-popup-close svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .wa-popup-body {
+      padding: 14px 12px 12px;
+    }
+
+    .wa-bubble {
+      max-width: 90%;
+      font-size: clamp(0.88rem, 4.2vw, 1.02rem);
+      padding: 13px 14px;
+      margin-bottom: 12px;
+    }
+
+    .wa-open-chat {
+      font-size: clamp(0.94rem, 4vw, 1.08rem);
+      padding: 9px 14px;
+    }
+
+    .wa-open-chat svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wa-fab,
+    .wa-popup,
+    .wa-popup-close,
+    .wa-open-chat {
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  const initWhatsAppWidget = () => {
+    const widget = document.querySelector('[data-wa-widget]');
+    if (!widget) return;
+
+    const fab = widget.querySelector('.wa-fab');
+    const popup = widget.querySelector('.wa-popup');
+    const closeBtn = widget.querySelector('.wa-popup-close');
+    const threshold = Number(widget.getAttribute('data-wa-threshold') || 160);
+    const openChatLink = widget.querySelector('.wa-open-chat');
+    const bindPress = (element, handler) => {
+      if (!element) return;
+      let touchTriggered = false;
+
+      element.addEventListener(
+        'touchend',
+        (event) => {
+          touchTriggered = true;
+          event.preventDefault();
+          handler(event);
+          window.setTimeout(() => {
+            touchTriggered = false;
+          }, 350);
+        },
+        { passive: false }
+      );
+
+      element.addEventListener('click', (event) => {
+        if (touchTriggered) {
+          event.preventDefault();
+          return;
+        }
+        handler(event);
+      });
+    };
+
+    const openPopup = () => {
+      if (!widget.classList.contains('is-visible')) return;
+      widget.classList.add('is-open');
+      if (popup) popup.hidden = false;
+      if (fab) fab.setAttribute('aria-expanded', 'true');
+    };
+
+    const closePopup = () => {
+      widget.classList.remove('is-open');
+      if (fab) fab.setAttribute('aria-expanded', 'false');
+      window.setTimeout(() => {
+        if (!widget.classList.contains('is-open') && popup) popup.hidden = true;
+      }, 220);
+    };
+
+    let showByTimeout = false;
+    let rafPending = false;
+    let isVisible = false;
+    const timeoutId = window.setTimeout(() => {
+      showByTimeout = true;
+      updateVisibility();
+    }, 1200);
+
+    const updateVisibility = () => {
+      const shouldShow = showByTimeout || window.scrollY > threshold;
+      if (shouldShow === isVisible) return;
+
+      isVisible = shouldShow;
+      if (shouldShow) {
+        widget.classList.add('is-visible');
+        return;
+      }
+
+      widget.classList.remove('is-visible');
+      closePopup();
+    };
+
+    const scheduleVisibilityCheck = () => {
+      if (rafPending) return;
+      rafPending = true;
+      requestAnimationFrame(() => {
+        rafPending = false;
+        updateVisibility();
+      });
+    };
+
+    updateVisibility();
+    window.addEventListener('scroll', scheduleVisibilityCheck, { passive: true });
+    window.addEventListener('load', updateVisibility, { once: true });
+    window.addEventListener('pageshow', updateVisibility);
+
+    bindPress(fab, () => {
+        if (widget.classList.contains('is-open')) {
+          closePopup();
+        } else {
+          openPopup();
+        }
+      });
+
+    bindPress(closeBtn, closePopup);
+
+    if (openChatLink) {
+      openChatLink.addEventListener('click', (event) => {
+        const href = openChatLink.getAttribute('href');
+        if (!href) return;
+        const newWindow = window.open(href, '_blank', 'noopener');
+        if (newWindow) {
+          event.preventDefault();
+          newWindow.opener = null;
+          return;
+        }
+        // Fallback para navegadores que bloquean la nueva pestaña.
+        event.preventDefault();
+        window.location.href = href;
+      });
+    }
+
+    document.addEventListener('click', (event) => {
+      if (!widget.classList.contains('is-open')) return;
+      if (widget.contains(event.target)) return;
+      closePopup();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closePopup();
+    });
+
+    window.addEventListener('beforeunload', () => {
+      window.clearTimeout(timeoutId);
+    });
+  };
+
+  const scheduleWhatsAppWidget = () => {
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(initWhatsAppWidget, { timeout: 1600 });
+      return;
+    }
+    window.setTimeout(initWhatsAppWidget, 0);
+  };
+
+  if (document.readyState === 'complete') {
+    scheduleWhatsAppWidget();
+  } else {
+    window.addEventListener('load', scheduleWhatsAppWidget, { once: true });
+  }
+</script>

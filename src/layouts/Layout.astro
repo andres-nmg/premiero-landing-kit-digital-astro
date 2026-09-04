@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import WhatsAppWidget from '../components/WhatsAppWidget.astro';
 
 interface Props {
 	title?: string;
@@ -68,6 +69,14 @@ const structuredData = {
 <html lang="es">
 	<head>
 		<meta charset="UTF-8" />
+		<script is:inline>
+			try {
+				const savedTheme = localStorage.getItem('rk-theme');
+				if (savedTheme === 'light' || savedTheme === 'dark') {
+					document.documentElement.dataset.theme = savedTheme;
+				}
+			} catch {}
+		</script>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
@@ -88,7 +97,7 @@ const structuredData = {
 		<meta name="theme-color" content="#11191e" media="(prefers-color-scheme: dark)" />
 		<meta name="color-scheme" content="light dark" />
 		<link rel="canonical" href={canonicalURL} />
-		<link rel="sitemap" href="/sitemap-index.xml" />
+		<link rel="sitemap" href="/sitemap.xml" />
 		<link rel="icon" type="image/png" href="/premiero-logo.png" />
 		<link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
 		<link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -97,5 +106,6 @@ const structuredData = {
 	</head>
 	<body>
 		<slot />
+		<WhatsAppWidget />
 	</body>
 </html>

@@ -3,6 +3,10 @@ import Icon from '../components/Icon.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import Layout from '../layouts/Layout.astro';
+
+const cf7FormId = '15169';
+const cf7FeedbackEndpoint = `https://www.premiero.es/cms/wp-json/contact-form-7/v1/contact-forms/${cf7FormId}/feedback`;
+const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY || '6Ld2G_AsAAAAAEHBN70hr2pGU3T0_QKHdTQJ3wzm';
 ---
 
 <Layout>
@@ -57,7 +61,7 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <section class="rk-contact rk-shell" id="rk-contacto"><div><p class="rk-eyebrow">Primer paso: revisar lo que tienes</p><h2>Déjanos tu web y te diremos por dónde empezar.</h2><p class="rk-contact-copy">Haremos una primera revisión gratuita para señalarte qué está fallando y qué cambios tendrían más impacto. Una valoración personal, clara y sin compromiso.</p><p class="rk-contact-mini"><Icon name="shield-check" /> Respuesta personal · sin publicidad · tus datos se usarán para atender tu solicitud</p></div><form class="rk-form" novalidate><label class="rk-field">Nombre<input type="text" name="nombre" placeholder="¿Cómo te llamas?" autocomplete="name" required></label><label class="rk-field">Teléfono / WhatsApp<input type="tel" name="telefono" placeholder="600 000 000" autocomplete="tel" inputmode="tel" required></label><label class="rk-field">Email<input type="email" name="email" placeholder="tu@empresa.es" autocomplete="email" required></label><label class="rk-field">Web actual<input type="url" name="web" placeholder="https://tuempresa.es" autocomplete="url" required></label><label class="rk-consent rk-form-wide"><input type="checkbox" name="aceptacion_privacidad" value="1" required><span>He leído la <a href="/politica-de-privacidad/">política de privacidad</a> y consiento que Premiero utilice mis datos para atender mi solicitud y contactarme al respecto.</span></label><button class="rk-submit rk-form-wide" type="submit">Quiero una revisión gratuita <Icon name="arrow-right" /></button><div class="rk-feedback" aria-live="polite"></div></form></section>
+    <section class="rk-contact rk-shell" id="rk-contacto"><div><p class="rk-eyebrow">Primer paso: revisar lo que tienes</p><h2>Déjanos tu web y te diremos por dónde empezar.</h2><p class="rk-contact-copy">Haremos una primera revisión gratuita para señalarte qué está fallando y qué cambios tendrían más impacto. Una valoración personal, clara y sin compromiso.</p><p class="rk-contact-mini"><Icon name="shield-check" /> Respuesta personal · sin publicidad · tus datos se usarán para atender tu solicitud</p></div><form class="rk-form" method="post" action={cf7FeedbackEndpoint} data-cf7-endpoint={cf7FeedbackEndpoint} data-recaptcha-site-key={recaptchaSiteKey}><input type="hidden" name="_wpcf7" value={cf7FormId}><input type="hidden" name="_wpcf7_version" value="6.1"><input type="hidden" name="_wpcf7_locale" value="es_ES"><input type="hidden" name="_wpcf7_unit_tag" value={`wpcf7-f${cf7FormId}-p0-o1`}><input type="hidden" name="_wpcf7_container_post" value="0"><input type="hidden" name="_wpcf7_posted_data_hash" value=""><input type="hidden" name="_wpcf7_recaptcha_response" value=""><input type="hidden" name="g-recaptcha-response" value=""><label class="rk-field">Nombre<input type="text" name="nombre" placeholder="¿Cómo te llamas?" autocomplete="name" required></label><label class="rk-field">Teléfono / WhatsApp<input type="tel" name="telefono" placeholder="600 000 000" autocomplete="tel" inputmode="tel" required></label><label class="rk-field">Email<input type="email" name="email" placeholder="tu@empresa.es" autocomplete="email" required></label><label class="rk-field">Web actual<input type="text" name="web" placeholder="tuempresa.es" autocomplete="url" inputmode="url" autocapitalize="none" spellcheck="false" required></label><label class="rk-consent rk-form-wide"><input type="checkbox" name="aceptacion_privacidad" value="1" required><span>He leído la <a href="/politica-de-privacidad/">política de privacidad</a> y consiento que Premiero utilice mis datos para atender mi solicitud y contactarme al respecto.</span></label><button class="rk-submit rk-form-wide" type="submit">Quiero una revisión gratuita <Icon name="arrow-right" /></button><div class="rk-feedback" aria-live="polite"></div><p class="rk-recaptcha-notice rk-form-wide" hidden>Este sitio está protegido por reCAPTCHA y se aplican la <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Política de Privacidad</a> y los <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer">Términos del Servicio</a> de Google.</p></form></section>
   </main>
 
   <SiteFooter />
@@ -91,18 +95,114 @@ import Layout from '../layouts/Layout.astro';
 
     const form = root.querySelector<HTMLFormElement>('.rk-form');
     const feedback = root.querySelector<HTMLElement>('.rk-feedback');
+    const submitButton = form?.querySelector<HTMLButtonElement>('.rk-submit');
+    const recaptchaNotice = form?.querySelector<HTMLElement>('.rk-recaptcha-notice');
 
-    form?.addEventListener('submit', (event) => {
-      event.preventDefault();
+    if (form && feedback && submitButton) {
+      const recaptchaKey = form.dataset.recaptchaSiteKey || '';
+      const originalButtonContent = submitButton.innerHTML;
+      let recaptchaLoader: Promise<void> | null = null;
 
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
+      const loadRecaptcha = async () => {
+        if (!recaptchaKey || (window as any).grecaptcha) return;
+        if (!recaptchaLoader) {
+          recaptchaLoader = new Promise<void>((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(recaptchaKey)}`;
+            script.async = true;
+            script.defer = true;
+            script.onload = () => resolve();
+            script.onerror = () => reject(new Error('recaptcha_load_failed'));
+            document.head.appendChild(script);
+          }).catch((error) => {
+            recaptchaLoader = null;
+            throw error;
+          });
+        }
+        await recaptchaLoader;
+      };
+
+      if (recaptchaKey) {
+        const preloadRecaptcha = () => loadRecaptcha().catch(() => {});
+        form.addEventListener('focusin', preloadRecaptcha, { once: true });
+        form.addEventListener('pointerdown', preloadRecaptcha, { once: true, passive: true });
       }
 
-      if (feedback) {
-        feedback.textContent = 'El formulario ya está diseñado, pero todavía no envía ni guarda los datos. Puedes contactarnos ahora por WhatsApp.';
-      }
-    });
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        if (recaptchaKey) {
+          recaptchaNotice?.removeAttribute('hidden');
+        }
+
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.textContent = 'Enviando…';
+        feedback.classList.remove('is-error');
+        feedback.textContent = '';
+
+        try {
+          const formData = new FormData(form);
+          const submittedWebsite = String(formData.get('web') || '').trim();
+          if (submittedWebsite) {
+            const normalizedWebsite = /^https?:\/\//i.test(submittedWebsite)
+              ? submittedWebsite
+              : `https://${submittedWebsite}`;
+            formData.set('web', normalizedWebsite);
+          }
+
+          if (recaptchaKey) {
+            await loadRecaptcha();
+            const grecaptcha = (window as any).grecaptcha;
+            if (!grecaptcha) throw new Error('recaptcha_unavailable');
+
+            const token = await new Promise<string>((resolve, reject) => {
+              grecaptcha.ready(() => {
+                grecaptcha.execute(recaptchaKey, { action: 'contact' }).then(resolve).catch(reject);
+              });
+            });
+
+            formData.set('_wpcf7_recaptcha_response', token);
+            formData.set('g-recaptcha-response', token);
+          }
+
+          const endpoint = form.dataset.cf7Endpoint || form.action;
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { Accept: 'application/json' },
+            body: formData,
+          });
+          const data = await response.json().catch(() => null);
+
+          if (!response.ok) throw new Error('request_failed');
+
+          if (data?.status === 'mail_sent') {
+            feedback.textContent = data.message || 'Solicitud enviada correctamente. Te responderemos lo antes posible.';
+            form.reset();
+          } else if (data?.status === 'spam') {
+            feedback.classList.add('is-error');
+            feedback.textContent = 'El control antispam ha rechazado el envío. Inténtalo de nuevo o contacta con nosotros por WhatsApp.';
+          } else if (data?.status === 'mail_failed') {
+            feedback.classList.add('is-error');
+            feedback.textContent = 'WordPress ha recibido la solicitud, pero no ha podido enviar el correo. Contacta con nosotros por WhatsApp mientras lo solucionamos.';
+          } else if (['validation_failed', 'unaccepted', 'aborted'].includes(data?.status)) {
+            feedback.classList.add('is-error');
+            feedback.textContent = data?.message || 'No hemos podido enviar la solicitud. Revisa los campos e inténtalo de nuevo.';
+          } else {
+            throw new Error('unexpected_response');
+          }
+        } catch {
+          feedback.classList.add('is-error');
+          feedback.textContent = 'No hemos podido enviar la solicitud. Inténtalo de nuevo o contacta con nosotros por WhatsApp.';
+        } finally {
+          submitButton.disabled = false;
+          submitButton.innerHTML = originalButtonContent;
+        }
+      });
+    }
   }
 </script>

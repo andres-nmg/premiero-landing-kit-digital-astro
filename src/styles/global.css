@@ -968,3 +968,30 @@ input[type="checkbox"]:focus-visible {
     font-size: .8125rem;
   }
 }
+
+#rescate-kit-v2 .rk-feedback:not(:empty) {
+  color: var(--rk-ink);
+}
+
+#rescate-kit-v2 .rk-feedback.is-error {
+  border-color: #d99191;
+  background: color-mix(in srgb, #7f1d1d 22%, var(--rk-surface));
+  color: #fff1f1;
+}
+
+.grecaptcha-badge {
+  visibility: hidden !important;
+}
+
+#rescate-kit-v2 .rk-recaptcha-notice {
+  margin: 0;
+  color: var(--rk-muted);
+  font-size: .75rem;
+  line-height: 1.5;
+}
+
+#rescate-kit-v2 .rk-recaptcha-notice a {
+  color: var(--rk-ink);
+  text-decoration: underline;
+  text-underline-offset: .18em;
+}

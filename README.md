@@ -68,25 +68,6 @@ PUBLIC_WHATSAPP_MESSAGE="Hola, quiero solicitar información para arreglar la we
 
 Si las variables de WhatsApp no están definidas, el componente utiliza el número y el mensaje mostrados en el ejemplo.
 
-## Formulario
-
-La landing envía el formulario mediante la API REST de Contact Form 7:
-
-```text
-https://www.premiero.es/cms/wp-json/contact-form-7/v1/contact-forms/15169/feedback
-```
-
-Los nombres enviados deben mantenerse coordinados con la configuración del formulario y del correo en WordPress:
-
-- `nombre`
-- `telefono`
-- `email`
-- `web`
-- `aceptacion_privacidad`
-
-El frontend normaliza el campo web añadiendo `https://` cuando la persona introduce un dominio sin protocolo. El consentimiento de privacidad es obligatorio. Los envíos se protegen con reCAPTCHA y se gestionan en WordPress mediante Contact Form 7 y Flamingo.
-
-Los cambios en etiquetas de correo, validación, destinatarios o almacenamiento deben realizarse también en el formulario correspondiente del WordPress de Premiero.
 
 ## SEO y recursos
 

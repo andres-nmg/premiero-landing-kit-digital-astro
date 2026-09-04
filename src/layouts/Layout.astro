@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import CookieConsent from '../components/CookieConsent.astro';
 import WhatsAppWidget from '../components/WhatsAppWidget.astro';
 
 interface Props {
@@ -77,6 +78,38 @@ const structuredData = {
 				}
 			} catch {}
 		</script>
+		<script is:inline>
+			(() => {
+				const consentKey = 'rk_cookie_consent';
+				const analyticsId = 'G-K2X4SM7DZ1';
+				let analyticsLoaded = false;
+				window[`ga-disable-${analyticsId}`] = true;
+
+				const loadAnalytics = () => {
+					if (analyticsLoaded) return;
+					analyticsLoaded = true;
+					window[`ga-disable-${analyticsId}`] = false;
+					window.dataLayer = window.dataLayer || [];
+					window.gtag = function gtag(){window.dataLayer.push(arguments);};
+					window.gtag('js', new Date());
+					window.gtag('config', analyticsId);
+
+					const script = document.createElement('script');
+					script.async = true;
+					script.src = `https://www.googletagmanager.com/gtag/js?id=${analyticsId}`;
+					document.head.appendChild(script);
+				};
+
+				try {
+					if (localStorage.getItem(consentKey) === 'accepted') loadAnalytics();
+				} catch {}
+
+				window.addEventListener('rk:cookie-consent', (event) => {
+					if (event.detail === 'accepted') loadAnalytics();
+					if (event.detail === 'rejected') window[`ga-disable-${analyticsId}`] = true;
+				});
+			})();
+		</script>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
@@ -107,5 +140,6 @@ const structuredData = {
 	<body>
 		<slot />
 		<WhatsAppWidget />
+		<CookieConsent />
 	</body>
 </html>

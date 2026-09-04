@@ -7,8 +7,12 @@ const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=
 
 <div class="wa-widget" data-wa-widget data-wa-threshold="160">
   <button
+  <a
     class="wa-fab"
     type="button"
+    href={whatsappUrl}
+    target="_blank"
+    rel="noopener noreferrer"
     aria-label="Abrir chat de WhatsApp"
     aria-controls="wa-popup"
     aria-expanded="false"
@@ -21,6 +25,7 @@ const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=
       />
     </svg>
   </button>
+  </a>
 
   <section class="wa-popup" id="wa-popup" role="dialog" aria-label="Chat de WhatsApp" hidden>
     <header class="wa-popup-head">
@@ -79,6 +84,8 @@ const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=
     box-shadow: 0 9px 26px rgba(0, 0, 0, 0.22);
     pointer-events: none;
     touch-action: manipulation;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .wa-fab svg {
@@ -260,6 +267,7 @@ const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=
       width: min(352px, calc(100vw - 20px));
       bottom: 76px;
       border-radius: 24px;
+      display: none !important;
     }
 
     .wa-popup-head {
@@ -359,7 +367,10 @@ const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=
       });
     };
 
+    const isMobileView = () => window.matchMedia('(max-width: 768px)').matches;
+
     const openPopup = () => {
+      if (isMobileView()) return;
       if (!widget.classList.contains('is-visible')) return;
       widget.classList.add('is-open');
       if (popup) popup.hidden = false;
@@ -411,6 +422,13 @@ const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=
     window.addEventListener('pageshow', updateVisibility);
 
     bindPress(fab, () => {
+    if (fab) {
+      fab.addEventListener('click', (event) => {
+        if (isMobileView()) {
+          // En responsive no se abre el popup: el enlace <a> abre WhatsApp directamente
+          return;
+        }
+        event.preventDefault();
         if (widget.classList.contains('is-open')) {
           closePopup();
         } else {
@@ -426,15 +444,20 @@ const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=
         if (!href) return;
         const newWindow = window.open(href, '_blank', 'noopener');
         if (newWindow) {
+      fab.addEventListener('keydown', (event) => {
+        if (event.key === ' ' && !isMobileView()) {
           event.preventDefault();
           newWindow.opener = null;
           return;
+          fab.click();
         }
         // Fallback para navegadores que bloquean la nueva pestaña.
         event.preventDefault();
         window.location.href = href;
       });
     }
+
+    bindPress(closeBtn, closePopup);
 
     document.addEventListener('click', (event) => {
       if (!widget.classList.contains('is-open')) return;

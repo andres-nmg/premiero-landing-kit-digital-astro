@@ -7,9 +7,59 @@
       <span class="rk-brand-independence">Independiente de Red.es y de los organismos gestores del programa</span>
     </div>
   </div>
-  <nav class="rk-navlinks" aria-label="Navegación principal">
-    <a href="/#rk-problemas">¿Te suena?</a>
-    <a href="/#rk-rescate">El rescate</a>
-    <a class="rk-nav-cta" href="/#rk-contacto">Auditoría gratuita</a>
-  </nav>
+  <div class="rk-header-actions">
+    <nav class="rk-navlinks" aria-label="Navegación principal">
+      <a href="/#rk-problemas">¿Te suena?</a>
+      <a href="/#rk-rescate">El rescate</a>
+      <a class="rk-nav-cta" href="/#rk-contacto">Auditoría gratuita</a>
+    </nav>
+    <button class="rk-theme-toggle" type="button" role="switch" data-theme-toggle aria-checked="false" aria-label="Activar modo oscuro">
+      <span class="rk-theme-track" aria-hidden="true">
+        <svg class="rk-theme-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3.5"/><path d="M12 2.5v2M12 19.5v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2.5 12h2M19.5 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg>
+        <svg class="rk-theme-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 15.2A8.5 8.5 0 0 1 8.8 3.5 8.5 8.5 0 1 0 20.5 15.2Z"/></svg>
+        <span class="rk-theme-thumb"></span>
+      </span>
+    </button>
+  </div>
 </header>
+
+<script>
+  const themeToggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  if (themeToggle) {
+    const systemPreference = window.matchMedia('(prefers-color-scheme: dark)');
+    const getSavedTheme = (): 'light' | 'dark' | null => {
+      try {
+        const savedTheme = localStorage.getItem('rk-theme');
+        return savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : null;
+      } catch {
+        return null;
+      }
+    };
+
+    const getEffectiveTheme = () => getSavedTheme() ?? (systemPreference.matches ? 'dark' : 'light');
+
+    const renderTheme = () => {
+      const isDark = getEffectiveTheme() === 'dark';
+      themeToggle.setAttribute('aria-checked', String(isDark));
+      themeToggle.setAttribute('aria-label', isDark ? 'Activar modo claro' : 'Activar modo oscuro');
+      themeToggle.title = isDark ? 'Activar modo claro' : 'Activar modo oscuro';
+    };
+
+    renderTheme();
+
+    themeToggle.addEventListener('click', () => {
+      const nextTheme = getEffectiveTheme() === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = nextTheme;
+
+      try {
+        localStorage.setItem('rk-theme', nextTheme);
+      } catch {}
+
+      renderTheme();
+    });
+
+    systemPreference.addEventListener('change', () => {
+      if (!getSavedTheme()) renderTheme();
+    });
+  }
+</script>

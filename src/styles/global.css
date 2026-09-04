@@ -1195,3 +1195,21 @@ html[data-theme='dark'] #rescate-kit-v2 {
     white-space: nowrap;
   }
 }
+
+#rescate-kit-v2 .rk-cookie-settings {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--rk-ink);
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: .08em;
+  text-underline-offset: .2em;
+  cursor: pointer;
+}
+
+#rescate-kit-v2 .rk-cookie-settings:focus-visible {
+  outline: 2px solid light-dark(#183f50, #d8f1f7);
+  outline-offset: 4px;
+}

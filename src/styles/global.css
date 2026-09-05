@@ -20,6 +20,29 @@
   src: url('/fonts/fraunces-latin.woff2') format('woff2');
 }
 
+/* Metric-matched local fallbacks prevent text from moving while web fonts load. */
+@font-face {
+  font-family: 'DM Sans Fallback';
+  font-style: normal;
+  font-weight: 400 600;
+  src: local('Arial');
+  size-adjust: 104.53%;
+  ascent-override: 94.90%;
+  descent-override: 29.66%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Fraunces Fallback';
+  font-style: normal;
+  font-weight: 400 500;
+  src: local('Georgia');
+  size-adjust: 105.20%;
+  ascent-override: 92.96%;
+  descent-override: 24.24%;
+  line-gap-override: 0%;
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 2rem;
@@ -1212,4 +1235,19 @@ html[data-theme='dark'] #rescate-kit-v2 {
 #rescate-kit-v2 .rk-cookie-settings:focus-visible {
   outline: 2px solid light-dark(#183f50, #d8f1f7);
   outline-offset: 4px;
+}
+
+/* Preserve the final typography while keeping the first layout metrically stable. */
+#rescate-kit-v2 {
+  font-family: 'DM Sans', 'DM Sans Fallback', Arial, sans-serif;
+}
+
+#rescate-kit-v2 h1 em,
+#rescate-kit-v2 h2,
+#rescate-kit-v2 .rk-pain h3,
+#rescate-kit-v2 .rk-after-logo,
+#rescate-kit-v2 .rk-after-title,
+#rescate-kit-v2 .rk-step-number,
+#rescate-kit-v2 .rk-legal-heading h1 {
+  font-family: 'Fraunces', 'Fraunces Fallback', Georgia, serif;
 }

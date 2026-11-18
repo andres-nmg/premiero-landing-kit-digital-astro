@@ -870,7 +870,7 @@ input[type="checkbox"]:focus-visible {
 #rescate-kit-v2 .rk-header-brand img {
   width: auto;
   height: 4.5rem;
-  aspect-ratio: 154 / 160;
+  aspect-ratio: 1 / 1;
   object-fit: contain;
 }
 
@@ -883,7 +883,7 @@ input[type="checkbox"]:focus-visible {
 #rescate-kit-v2 .rk-footer-identity img {
   width: auto;
   height: 3.25rem;
-  aspect-ratio: 154 / 160;
+  aspect-ratio: 1 / 1;
   object-fit: contain;
 }
 
